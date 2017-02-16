@@ -6,6 +6,7 @@
 package main
 
 import (
+	pv "PrintVisitor"
 	"fmt"
 	"go/ast"
 	"go/parser"
@@ -32,7 +33,7 @@ func main() {
 
 	// Inspect (DFS-walk) the AST
 	// Anon. func is called in encounter of each node
-	ast.Inspect(f, func(n ast.Node) bool {
+	pv.Inspect(f, func(n ast.Node) bool {
 		//		var s string
 		switch x := n.(type) {
 		default:
