@@ -38,9 +38,6 @@ func walkDeclList(v Visitor, list []ast.Decl) {
 	}
 }
 
-// TODO(gri): Investigate if providing a closure to Walk leads to
-//            simpler use (and may help eliminate Inspect in turn).
-
 // Walk traverses an AST in depth-first order: It starts by calling
 // v.Visit(node); node must not be nil. If the visitor w returned by
 // v.Visit(node) is not nil, Walk is invoked recursively with visitor
@@ -84,8 +81,14 @@ func Walk(v Visitor, node ast.Node) {
 		}
 
 	// Expressions
-	case *ast.BadExpr, *ast.Ident, *ast.BasicLit:
-		// nothing to do
+	case *ast.BadExpr:
+		// do nothing
+
+	case *ast.Ident:
+		fmt.Printf("%s", n.Name)
+
+	case *ast.BasicLit:
+		fmt.Printf("%s", n.Value)
 
 	case *ast.Ellipsis:
 		if n.Elt != nil {
@@ -304,10 +307,12 @@ func Walk(v Visitor, node ast.Node) {
 		if n.Type != nil {
 			Walk(v, n.Type)
 		}
+		fmt.Printf(" = ")
 		walkExprList(v, n.Values)
 		if n.Comment != nil {
 			Walk(v, n.Comment)
 		}
+		fmt.Printf("\n")
 
 	case *ast.TypeSpec:
 		if n.Doc != nil {
@@ -326,6 +331,7 @@ func Walk(v Visitor, node ast.Node) {
 		if n.Doc != nil {
 			Walk(v, n.Doc)
 		}
+		fmt.Printf("var ")
 		for _, s := range n.Specs {
 			Walk(v, s)
 		}
@@ -348,7 +354,9 @@ func Walk(v Visitor, node ast.Node) {
 		if n.Doc != nil {
 			Walk(v, n.Doc)
 		}
+		fmt.Printf("package ")
 		Walk(v, n.Name)
+		fmt.Printf("\n")
 		walkDeclList(v, n.Decls)
 		// don't walk n.Comments - they have been
 		// visited already through the individual
