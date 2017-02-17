@@ -34,28 +34,12 @@ func main() {
 	// Inspect (DFS-walk) the AST
 	// Anon. func is called in encounter of each node
 	pv.Inspect(f, func(n ast.Node) bool {
-		//		var s string
-		//switch x := n.(type) {
-		//default:
-		//fmt.Printf("%T --> %+v\n", x, x)
 		/*
-			case *ast.File:
-				s = "package"
-				//		case *ast.GenDecl:
-				//			s = fmt.Sprintf("\n%s ", x.Tok)
-			case *ast.ValueSpec:
-				s = fmt.Sprintf("%s = %s", x.Names[0], x.Values[0])
-				//		case *ast.BasicLit:
-				//			s = fmt.Sprintf(" %s ", x.Value)
-				//		case *ast.Ident:
-				//			s = fmt.Sprintf(" %s ", x.Name)
-			}
-
-			if s != "" {
-				fmt.Printf("%s\n", s)
+			switch x := n.(type) {
+			default:
+				fmt.Printf("%T --> %+v\n", x, x)
 			}
 		*/
 		return true
-		//}
 	})
 }

@@ -21,8 +21,11 @@ func walkIdentList(v Visitor, list []*ast.Ident) {
 }
 
 func walkExprList(v Visitor, list []ast.Expr) {
-	for _, x := range list {
+	for i, x := range list {
 		Walk(v, x)
+		if i < len(list)-1 {
+			fmt.Printf(", ")
+		}
 	}
 }
 
@@ -76,9 +79,14 @@ func Walk(v Visitor, node ast.Node) {
 		}
 
 	case *ast.FieldList:
-		for _, f := range n.List {
+		fmt.Printf("(")
+		for i, f := range n.List {
 			Walk(v, f)
+			if i != len(n.List)-1 {
+				fmt.Printf(", ")
+			}
 		}
+		fmt.Printf(")")
 
 	// Expressions
 	case *ast.BadExpr:
@@ -110,6 +118,7 @@ func Walk(v Visitor, node ast.Node) {
 
 	case *ast.SelectorExpr:
 		Walk(v, n.X)
+		fmt.Printf(".")
 		Walk(v, n.Sel)
 
 	case *ast.IndexExpr:
@@ -136,7 +145,9 @@ func Walk(v Visitor, node ast.Node) {
 
 	case *ast.CallExpr:
 		Walk(v, n.Fun)
+		fmt.Printf("(")
 		walkExprList(v, n.Args)
+		fmt.Printf(")")
 
 	case *ast.StarExpr:
 		Walk(v, n.X)
@@ -331,7 +342,7 @@ func Walk(v Visitor, node ast.Node) {
 		if n.Doc != nil {
 			Walk(v, n.Doc)
 		}
-		fmt.Printf("var ")
+		fmt.Printf("%s ", n.Tok)
 		for _, s := range n.Specs {
 			Walk(v, s)
 		}
@@ -343,11 +354,14 @@ func Walk(v Visitor, node ast.Node) {
 		if n.Recv != nil {
 			Walk(v, n.Recv)
 		}
+		fmt.Printf("\nfunc ")
 		Walk(v, n.Name)
 		Walk(v, n.Type)
+		fmt.Printf(" {\n")
 		if n.Body != nil {
 			Walk(v, n.Body)
 		}
+		fmt.Printf("\n}")
 
 	// Files and packages
 	case *ast.File:
