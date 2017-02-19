@@ -343,8 +343,18 @@ func Walk(v Visitor, node ast.Node) {
 			Walk(v, n.Doc)
 		}
 		fmt.Printf("%s ", n.Tok)
-		for _, s := range n.Specs {
+		multiImport := n.Tok.String() == "import" && n.Lparen.IsValid()
+		if multiImport {
+			fmt.Printf("(")
+		}
+		for i, s := range n.Specs {
 			Walk(v, s)
+			if multiImport && i != len(n.Specs)-1 {
+				fmt.Printf("\n")
+			}
+		}
+		if multiImport {
+			fmt.Printf(")")
 		}
 
 	case *ast.FuncDecl:

@@ -1,8 +1,10 @@
 package main
 
-import "fmt"
+import ("fmt"
+    "os"
+)
 
 func main() {
     var s = "hello"
-    fmt.Printf("%s", s)
+    fmt.Fprintf(os.Stdout, "%s", s)
 }
