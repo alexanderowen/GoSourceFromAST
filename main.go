@@ -15,6 +15,8 @@ import (
 	"os"
 )
 
+var debug = false
+
 func main() {
 	fn := os.Args[1]
 	file, err := ioutil.ReadFile(fn)
@@ -34,12 +36,12 @@ func main() {
 	// Inspect (DFS-walk) the AST
 	// Anon. func is called in encounter of each node
 	pv.Inspect(f, func(n ast.Node) bool {
-		/*
+		if debug {
 			switch x := n.(type) {
 			default:
 				fmt.Printf("%T --> %+v\n", x, x)
 			}
-		*/
+		}
 		return true
 	})
 }

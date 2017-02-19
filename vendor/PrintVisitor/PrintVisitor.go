@@ -217,7 +217,9 @@ func Walk(v Visitor, node ast.Node) {
 
 	case *ast.AssignStmt:
 		walkExprList(v, n.Lhs)
+		fmt.Printf(" := ")
 		walkExprList(v, n.Rhs)
+		fmt.Printf("\n")
 
 	case *ast.GoStmt:
 		Walk(v, n.Call)
@@ -237,13 +239,18 @@ func Walk(v Visitor, node ast.Node) {
 		walkStmtList(v, n.List)
 
 	case *ast.IfStmt:
+		fmt.Printf("if ")
 		if n.Init != nil {
 			Walk(v, n.Init)
 		}
 		Walk(v, n.Cond)
+		fmt.Printf("{\n")
 		Walk(v, n.Body)
+		fmt.Printf("\n}")
 		if n.Else != nil {
+			fmt.Printf("else {\n")
 			Walk(v, n.Else)
+			fmt.Printf("}\n")
 		}
 
 	case *ast.CaseClause:
