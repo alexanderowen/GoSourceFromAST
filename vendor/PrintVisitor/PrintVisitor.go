@@ -30,8 +30,11 @@ func walkExprList(v Visitor, list []ast.Expr) {
 }
 
 func walkStmtList(v Visitor, list []ast.Stmt) {
-	for _, x := range list {
+	for i, x := range list {
 		Walk(v, x)
+		if i < len(list)-1 {
+			fmt.Printf("\n")
+		}
 	}
 }
 
@@ -157,6 +160,7 @@ func Walk(v Visitor, node ast.Node) {
 
 	case *ast.BinaryExpr:
 		Walk(v, n.X)
+		fmt.Printf(" %s ", n.Op.String())
 		Walk(v, n.Y)
 
 	case *ast.KeyValueExpr:
@@ -219,7 +223,6 @@ func Walk(v Visitor, node ast.Node) {
 		walkExprList(v, n.Lhs)
 		fmt.Printf(" := ")
 		walkExprList(v, n.Rhs)
-		fmt.Printf("\n")
 
 	case *ast.GoStmt:
 		Walk(v, n.Call)
@@ -254,17 +257,27 @@ func Walk(v Visitor, node ast.Node) {
 		}
 
 	case *ast.CaseClause:
+		if n.List == nil {
+			fmt.Printf("default")
+		} else {
+			fmt.Printf("case ")
+		}
 		walkExprList(v, n.List)
+		fmt.Printf(":\n")
 		walkStmtList(v, n.Body)
 
 	case *ast.SwitchStmt:
+		fmt.Printf("switch ")
 		if n.Init != nil {
 			Walk(v, n.Init)
+			fmt.Printf(";")
 		}
 		if n.Tag != nil {
 			Walk(v, n.Tag)
 		}
+		fmt.Printf(" {\n")
 		Walk(v, n.Body)
+		fmt.Printf("\n}")
 
 	case *ast.TypeSwitchStmt:
 		if n.Init != nil {
