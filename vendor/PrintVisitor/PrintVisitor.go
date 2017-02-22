@@ -107,8 +107,11 @@ func Walk(v Visitor, node ast.Node) {
 		}
 
 	case *ast.FuncLit:
+		fmt.Printf("func")
 		Walk(v, n.Type)
+		fmt.Printf(" {\n")
 		Walk(v, n.Body)
+		fmt.Printf("\n}")
 
 	case *ast.CompositeLit:
 		if n.Type != nil {
@@ -122,6 +125,7 @@ func Walk(v Visitor, node ast.Node) {
 		Walk(v, n.X)
 
 	case *ast.SelectorExpr:
+		fmt.Printf(" ")
 		Walk(v, n.X)
 		fmt.Printf(".")
 		Walk(v, n.Sel)
@@ -146,9 +150,13 @@ func Walk(v Visitor, node ast.Node) {
 
 	case *ast.TypeAssertExpr:
 		Walk(v, n.X)
+		fmt.Printf(".(")
 		if n.Type != nil {
 			Walk(v, n.Type)
+		} else {
+			fmt.Printf("type")
 		}
+		fmt.Printf(")")
 
 	case *ast.CallExpr:
 		Walk(v, n.Fun)
@@ -237,6 +245,7 @@ func Walk(v Visitor, node ast.Node) {
 		Walk(v, n.Call)
 
 	case *ast.ReturnStmt:
+		fmt.Printf("return ")
 		walkExprList(v, n.Results)
 
 	case *ast.BranchStmt:
@@ -286,11 +295,15 @@ func Walk(v Visitor, node ast.Node) {
 		fmt.Printf("\n}")
 
 	case *ast.TypeSwitchStmt:
+		fmt.Printf("switch ")
 		if n.Init != nil {
 			Walk(v, n.Init)
+			fmt.Printf(";")
 		}
 		Walk(v, n.Assign)
+		fmt.Printf(" {\n")
 		Walk(v, n.Body)
+		fmt.Printf("\n}")
 
 	case *ast.CommClause:
 		if n.Comm != nil {
@@ -386,7 +399,7 @@ func Walk(v Visitor, node ast.Node) {
 			}
 		}
 		if multiImport {
-			fmt.Printf(")")
+			fmt.Printf(")\n")
 		}
 
 	case *ast.FuncDecl:
