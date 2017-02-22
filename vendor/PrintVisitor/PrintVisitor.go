@@ -114,7 +114,9 @@ func Walk(v Visitor, node ast.Node) {
 		if n.Type != nil {
 			Walk(v, n.Type)
 		}
+		fmt.Printf("{")
 		walkExprList(v, n.Elts)
+		fmt.Printf("}")
 
 	case *ast.ParenExpr:
 		Walk(v, n.X)
@@ -170,7 +172,9 @@ func Walk(v Visitor, node ast.Node) {
 	// Types
 	case *ast.ArrayType:
 		if n.Len != nil {
+			fmt.Printf("[")
 			Walk(v, n.Len)
+			fmt.Printf("]")
 		}
 		Walk(v, n.Elt)
 
@@ -308,14 +312,19 @@ func Walk(v Visitor, node ast.Node) {
 		Walk(v, n.Body)
 
 	case *ast.RangeStmt:
+		fmt.Printf("for ")
 		if n.Key != nil {
 			Walk(v, n.Key)
 		}
 		if n.Value != nil {
+			fmt.Printf(", ")
 			Walk(v, n.Value)
 		}
+		fmt.Printf(":= range ")
 		Walk(v, n.X)
+		fmt.Printf(" {\n")
 		Walk(v, n.Body)
+		fmt.Printf("\n}")
 
 	// Declarations
 	case *ast.ImportSpec:
