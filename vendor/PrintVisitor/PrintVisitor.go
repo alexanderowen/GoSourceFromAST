@@ -333,6 +333,7 @@ func Walk(v Visitor, node ast.Node) {
 		}
 		if n.Name != nil {
 			Walk(v, n.Name)
+			fmt.Printf(" ")
 		}
 		Walk(v, n.Path)
 		if n.Comment != nil {
