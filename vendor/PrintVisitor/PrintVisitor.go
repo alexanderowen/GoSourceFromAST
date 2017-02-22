@@ -1,3 +1,7 @@
+// Custom visitor for the Go compiler AST
+// For a subset of possible Go programs, prints an approximation of the source to stdout
+// Large part of code base provided by the Go compiler visitor, "go/ast/walk.go"
+
 package PrintVisitor
 
 import (
