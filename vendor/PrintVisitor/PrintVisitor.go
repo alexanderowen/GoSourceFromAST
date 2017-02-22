@@ -128,7 +128,9 @@ func Walk(v Visitor, node ast.Node) {
 
 	case *ast.IndexExpr:
 		Walk(v, n.X)
+		fmt.Printf("[")
 		Walk(v, n.Index)
+		fmt.Printf("]")
 
 	case *ast.SliceExpr:
 		Walk(v, n.X)
